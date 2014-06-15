@@ -1,6 +1,8 @@
 ![KeystoneJS](http://keystonejs.com/images/logo.svg)
 ===================================
 
+![Build Status](https://travis-ci.org/JedWatson/keystone.svg)
+
 [KeystoneJS](http://keystonejs.com) is a powerful new Node.js content management system and web app framework built on [express](http://expressjs.com) and [mongoose](http://mongoosejs.com) that makes it easy to create sophisticated web sites and apps, and gives you a beautiful, auto-generated Admin UI.
 
 To get started, check out [keystonejs.com](http://keystonejs.com)!
@@ -144,26 +146,28 @@ as well as how to set up and use database models in your application.
 
 Keystone's field types include:
 
-*	[Boolean](http://keystonejs.com/docs/database#field_boolean)
-*	[Text](http://keystonejs.com/docs/database#field_text)
-*	[Textarea](http://keystonejs.com/docs/database#field_textarea)
-*	[Email](http://keystonejs.com/docs/database#field_email)
-*	[Url](http://keystonejs.com/docs/database#field_url)
-*	[Html](http://keystonejs.com/docs/database#field_html)
-*	[Date](http://keystonejs.com/docs/database#field_date)
-*	[Datetime](http://keystonejs.com/docs/database#field_datetime)
-*	[Key](http://keystonejs.com/docs/database#field_key)
-*	[Number](http://keystonejs.com/docs/database#field_number)
-*	[Money](http://keystonejs.com/docs/database#field_money)
-*	[Select](http://keystonejs.com/docs/database#field_select)
-*	[Markdown](http://keystonejs.com/docs/database#field_markdown)
-*	[Name](http://keystonejs.com/docs/database#field_name)
-*	[Password](http://keystonejs.com/docs/database#field_password)
-*	[Location](http://keystonejs.com/docs/database#field_location)
-*	[CloudinaryImage](http://keystonejs.com/docs/database#field_cloudinaryimage)
-*	[CloudinaryImages](http://keystonejs.com/docs/database#field_cloudinaryimages)
-*	[S3 File](http://keystonejs.com/docs/database#field_s3file)
-*	[Embedly](http://keystonejs.com/docs/database#field_embedly)
+*	[Boolean](http://keystonejs.com/docs/database/#fieldtypes-boolean)
+*	[Text](http://keystonejs.com/docs/database/#fieldtypes-text)
+*	[Textarea](http://keystonejs.com/docs/database/#fieldtypes-textarea)
+*	[Email](http://keystonejs.com/docs/database/#fieldtypes-email)
+*	[Url](http://keystonejs.com/docs/database/#fieldtypes-url)
+*	[Html](http://keystonejs.com/docs/database/#fieldtypes-html)
+*	[Color](http://keystonejs.com/docs/database/#fieldtypes-color)
+*	[Date](http://keystonejs.com/docs/database/#fieldtypes-date)
+*	[Datetime](http://keystonejs.com/docs/database/#fieldtypes-datetime)
+*	[Key](http://keystonejs.com/docs/database/#fieldtypes-key)
+*	[Number](http://keystonejs.com/docs/database/#fieldtypes-number)
+*	[Money](http://keystonejs.com/docs/database/#fieldtypes-money)
+*	[Select](http://keystonejs.com/docs/database/#fieldtypes-select)
+*	[Markdown](http://keystonejs.com/docs/database/#fieldtypes-markdown)
+*	[Name](http://keystonejs.com/docs/database/#fieldtypes-name)
+*	[Password](http://keystonejs.com/docs/database/#fieldtypes-password)
+*	[Location](http://keystonejs.com/docs/database/#fieldtypes-location)
+*	[CloudinaryImage](http://keystonejs.com/docs/database/#fieldtypes-cloudinaryimage)
+*	[CloudinaryImages](http://keystonejs.com/docs/database/#fieldtypes-cloudinaryimages)
+*	[LocalFile](http://keystonejs.com/docs/database/#fieldtypes-localfile)
+*	[S3 File](http://keystonejs.com/docs/database/#fieldtypes-s3file)
+*	[Embedly](http://keystonejs.com/docs/database/#fieldtypes-embedly)
 
 Keystone also has [Relationship fields](http://keystonejs.com/docs/database#relationships) for managing one-to-many and many-to-many
 relationships between different models.

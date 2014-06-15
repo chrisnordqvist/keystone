@@ -148,6 +148,28 @@ block content
 					td <code>nodelete</code> <code class="data-type">Boolean</code>
 					td Prevents deletion of items from the list through the Keystone Admin UI
 			
+			p.note If you're wondering how to control which navigation area Lists are categorised under in the Admin UI, check out the <code>nav</code> option in the <a href="http://keystonejs.com/docs/configuration/#options-project">KeystoneJS Configuration</a> docs.
+			
+			h4 Drilldown example
+			
+			p The drilldown option is a nice way to improve the usability of the Admin UI by providing context to the item a user is currently editing.
+			
+			p By default, the drilldown will just show the list that the item belongs to.
+			
+			p You can, however, set it to a <code>Relationship</code> field in the schema, and it will display the item currently stored in that relationship field.
+			
+			p If there would be several relationships that may be relevant to display in the drilldown list, you can separate their paths with spaces.
+			
+			.code-header: h4 Example: Including the author in the drilldown for Posts
+			pre: code.language-javascript
+				| var Post = new keystone.List('Post', {
+				|     autokey: { path: 'slug', from: 'title', unique: true },
+				|     map: { name: 'title' },
+				|     defaultSort: '-createdAt',
+				|     drilldown: 'author' // author is defined as a Relationship field in the example above
+				| });
+			
+			
 			a(name='lists-plugins')
 			h3 Schema Plugins
 			
@@ -195,7 +217,7 @@ block content
 
 			p <strong>Promises</strong>
 
-			p There exist another way to work with events in Javascript that is included in mongoose query methods. Instead of passing a <a href="http://javascriptissexy.com/understand-javascript-callback-functions-and-use-them/" target="_blank">callback</a> to the  <a href="http://mongoosejs.com/docs/api.html#query_Query-exec" target="_blank">exec</a> method, we can use what it returns: a <a href="http://www.html5rocks.com/fr/tutorials/es6/promises/" target="_blank">Promise</a>. Promises are very useful for clean chaining of events with propagation of error.
+			p There exist another way to work with events in Javascript that is included in mongoose query methods. Instead of passing a <a href="http://javascriptissexy.com/understand-javascript-callback-functions-and-use-them/" target="_blank">callback</a> to the  <a href="http://mongoosejs.com/docs/api.html#query_Query-exec" target="_blank">exec</a> method, we can use what it returns: a <a href="http://www.html5rocks.com/en/tutorials/es6/promises/" target="_blank">Promise</a>. Promises are very useful for clean chaining of events with propagation of error.
 
 			p <strong>For example:</strong> load 100 <code>posts</code>, then do something asynchronous, then do something with result:
 			
@@ -535,6 +557,12 @@ block content
 				p <code>height</code> <code class="data-type">Number</code> - the height of the field (in pixels)
 			
 			
+			a(name="fieldtypes-color")
+			h3 <code>Color</code>
+			h4 <code class="data-type">Color</code> &mdash; Displayed as a text field with a color picker
+			pre: code.language-javascript { type: Types.Color }
+
+			
 			a(name="fieldtypes-date")
 			h3 <code>Date</code>
 			h4 <code class="data-type">Date</code> &mdash; Displayed as a date picker in the Admin UI
@@ -557,6 +585,7 @@ block content
 					| item._.createdDate.format(); // returns today's date using the default format string
 					| item._.createdDate.parse('2013-12-04'); // returns a moment object with the parsed date
 					| item._.createdDate.format('YYYY-MM-DD'); // returns '2013-12-04'
+
 			
 			a(name="fieldtypes-datetime")
 			h3 <code>Datetime</code>
@@ -811,6 +840,8 @@ block content
 				p <code>thumbnail(width, height, options)</code> <code class="data-type">String</code> - crops the image to fill the specified width and height
 				p In all methods, <code class="default-value">options</code> is an optional <code class="data-type">Object</code>. See <a href="http://cloudinary.com/documentation/image_transformations" target="_blank">Cloudinary's Transformation Documentation</a> for more information on the supported options and transformations.
 				//- TODO: Usage Examples
+				
+			p.note Remember that if you are uploading images to a <code>CloudinaryImage</code> field using an HTML form, you need to specify <code>enctype="multipart/form-data"</code> in your <code>form</code> tag.
 			
 			a(name="fieldtypes-cloudinaryimages")
 			h3 <code>CloudinaryImages</code>
@@ -827,6 +858,12 @@ block content
 			p Stores files on the local file system.
 			pre: code.language-javascript { type: Types.LocalFile }
 			.options
+				
+				h5 Options
+				p <code>dest</code> <code class="data-type">String</code> - required, the path to store uploaded file
+				p <code>datePrefix</code> <code class="data-type">String</code> - if set, prefixes the file name with the current date in this format (see <a href="http://momentjs.com" target="_blank">moment.js</a> for format options)
+				p <code>allowedTypes</code> <code class="data-type">Array</code> of <code class="data-type">String</code> - optional white-list of allowed mime types for uploaded file
+				p <code>filename</code> <code class="data-type">Function</code> - function with arguments current model and client file name to return the new filename to upload.
 				
 				h5 Schema
 				p <code>filename</code> <code class="data-type">String</code>

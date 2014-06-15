@@ -1,9 +1,6 @@
 var keystone = require('../../'),
 	_ = require('underscore'),
-	async = require('async'),
-	cloudinary = require('cloudinary'),
-	moment = require('moment'),
-	utils = require('keystone-utils');
+	async = require('async');
 
 exports = module.exports = function(req, res) {
 	
@@ -48,7 +45,7 @@ exports = module.exports = function(req, res) {
 					
 					var field = req.list.fields[path];
 					
-					if (!field || field.type != 'relationship')
+					if (!field || field.type !== 'relationship')
 						throw new Error('Drilldown for ' + req.list.key + ' is invalid: field at path ' + path + ' is not a relationship.');
 					
 					var refList = field.refList;
@@ -61,7 +58,7 @@ exports = module.exports = function(req, res) {
 							if (err || !results) {
 								done(err);
 							}
-							var more = (results.length == 4) ? results.pop() : false;
+							var more = (results.length === 4) ? results.pop() : false;
 							if (results.length) {
 								drilldown.data[path] = results;
 								drilldown.items.push({
@@ -69,7 +66,7 @@ exports = module.exports = function(req, res) {
 									items: _.map(results, function(i) { return {
 										label: refList.getDocumentName(i),
 										href: '/keystone/' + refList.path + '/' + i.id
-									}}),
+									};}),
 									more: (more) ? true : false
 								});
 							}
@@ -98,7 +95,7 @@ exports = module.exports = function(req, res) {
 					drilldown.items.reverse();
 					cb(err);
 				});
-			}
+			};
 			
 			var loadRelationships = function(cb) {
 				
@@ -106,7 +103,7 @@ exports = module.exports = function(req, res) {
 					
 					// TODO: Handle invalid relationship config
 					rel.list = keystone.list(rel.ref);
-					rel.sortable = (rel.list.get('sortable') && rel.list.get('sortContext') == req.list.key + ':' + rel.path);
+					rel.sortable = (rel.list.get('sortable') && rel.list.get('sortContext') === req.list.key + ':' + rel.path);
 					
 					// TODO: Handle relationships with more than 1 page of results
 					var q = rel.list.paginate({ page: 1, perPage: 100 })
@@ -114,7 +111,7 @@ exports = module.exports = function(req, res) {
 						.sort(rel.list.defaultSort);
 						
 					// rel.columns = _.reject(rel.list.defaultColumns, function(col) { return (col.type == 'relationship' && col.refList == req.list) });
-					rel.columns = rel.list.defaultColumns
+					rel.columns = rel.list.defaultColumns;
 					rel.list.selectColumns(q, rel.columns);
 					
 					q.exec(function(err, results) {
@@ -123,13 +120,13 @@ exports = module.exports = function(req, res) {
 					});
 					
 				}, cb);
-			}
+			};
 			
 			var	loadFormFieldTemplates = function(cb){
-				var onlyFields = function(item) { return item.type == 'field'; }
-				var compile = function(item, callback) { item.field.compile('form',callback); }
+				var onlyFields = function(item) { return item.type === 'field'; };
+				var compile = function(item, callback) { item.field.compile('form',callback); };
 				async.eachSeries(req.list.uiElements.filter(onlyFields), compile , cb);
-			}
+			};
 			
 			
 			/** Render View */
@@ -139,6 +136,8 @@ exports = module.exports = function(req, res) {
 				loadRelationships,
 				loadFormFieldTemplates
 			], function(err) {
+				
+				// TODO: Handle err
 				
 				var showRelationships = _.some(relationships, function(rel) {
 					return rel.items.results.length;
@@ -158,9 +157,9 @@ exports = module.exports = function(req, res) {
 				
 			});
 			
-		}
+		};
 		
-		if (req.method == 'POST' && req.body.action == 'updateItem' && !req.list.get('noedit')) {
+		if (req.method === 'POST' && req.body.action === 'updateItem' && !req.list.get('noedit')) {
 			
 			item.getUpdateHandler(req).process(req.body, { flashErrors: true, logErrors: true }, function(err) {
 				if (err) {
@@ -177,4 +176,4 @@ exports = module.exports = function(req, res) {
 		
 	});
 	
-}
+};

@@ -18,6 +18,8 @@ block js
 		script(src='/keystone/js/lib/tinymce/jquery.tinymce.min.js')
 		script(src="/keystone/js/common/ui-wysiwyg.js")
 	script(src='/keystone/js/views/list.js')
+	script(src='/keystone/js/lib/browserified/querystring.js')
+	script(src='/keystone/js/lib/browserified/queryfilter.js')
 	script.
 		Keystone.list = { path: "#{list.path}", label: "#{list.label}", singular: "#{list.singular}", plural: "#{list.plural}", cols: !{JSON.stringify(colPaths)} };
 		Keystone.wysiwyg = { options: !{JSON.stringify(wysiwygOptions)} };
@@ -30,7 +32,9 @@ block content
 		.create-item
 			if list.get('autocreate')
 				.toolbar
-					a(href='?new').btn.btn-default.btn-create.btn-create-item Create #{list.singular}
+					a(href='?new').btn.btn-default.btn-create.btn-create-item
+						span.ion-plus-round
+						|  Create #{list.singular}
 			else
 				form(method='post', action='/keystone/' + list.path)
 					input(type='hidden', name='action', value='create')
@@ -54,7 +58,9 @@ block content
 							button(type='submit').btn.btn-default.btn-create Create
 							a(href=js).btn.btn-link.btn-cancel.btn-cancel-create-item cancel
 						.toolbar-default
-							a(href=js, class=(showCreateForm ? 'autoclick' : null)).btn.btn-default.btn-create.btn-create-item Create #{list.singular}
+							a(href=js, class=(showCreateForm ? 'autoclick' : null)).btn.btn-default.btn-create.btn-create-item
+								span.ion-plus-round
+								|  Create #{list.singular}
 		hr
 	
 	//-
@@ -71,29 +77,29 @@ block content
 				span No #{list.plural.toLowerCase()} found
 					= search || xFilters ? '' : '.'
 			if search
-				span.text-muted  matching  
+				span.text-muted  matching 
 				span=search
 				if xFilters
-					span.text-muted  and 
-					span= utils.plural(xFilters, '* other filter')
+					span.text-muted  and
+					span= utils.plural(xFilters, ' * other filter')
 			else if xFilters
 				span.text-muted  matching 
-				span= utils.plural(xFilters, '* filter')
+				span= utils.plural(xFilters, ' * filter')
 			
 			//- Sort
 			if items.results.length
 				if sort.by
-					span.text-muted  ordered by 
+					span.text-muted  ordered by&nbsp;
 				else
 					span.text-muted &mdash;
 				span.dropdown.list-sort-dropdown
 					a(href=js, data-toggle='dropdown').dropdown-toggle
 						if sort.label
-							= sort.label.toLowerCase() + ' '
+							=  sort.label.toLowerCase() + ' '
 							if sort.inv
-								|  (descending) 
+								|  (descending)
 						else
-							| sort by 
+							| sort by
 						b.caret
 					ul.dropdown-menu
 						if list.get('sortable')
@@ -138,33 +144,37 @@ block content
 			//- Search Bar
 			//- ------------------------------
 			if items.results.length || search || xFilters
-				.list-toolbar.form-row
-					.col-sm-6: .search-list
-						.form-row
-							.col-xs-10.col-sm-9.col-md-10.search-field
+				.list-toolbar
+					.search-list.pull-left
+						.form-inline
+							.dropdown.list-filter-dropdown.dropdown-recent.hidden.inline-block
+								a(href=js, data-toggle='dropdown', title='Recent Searches').btn.btn-default.dropdown-toggle
+									span.sr-only Recent Searches
+									span.ion-clock
+								ul.dropdown-menu
+									li Searches go here
+							.search-field
 								input(type='text', name='search', placeholder='Search ' + list.plural.toLowerCase(), value=search)#list-search.form-control
 								if search
 									a(href='/keystone/#{list.path}').search-list-clear &times;
-							.col-xs-2.col-sm-3.col-md-2.search-button: button(type='submit').btn.btn-default.btn-search.btn-block
+							span.search-button: button(type='submit').btn.btn-default.btn-search
 								span.visible-xs Go
 								span.hidden-xs Search
-					
-					.col-xs-4.col-sm-2
-						.dropdown.list-filter-dropdown
-							a(href=js, data-toggle='dropdown').btn.btn-default.dropdown-toggle
-								| Add Filter... 
-								b.caret
-							ul.dropdown-menu: each el in list.uiElements
-								if el.type == 'heading'
-									li.dropdown-header= el.heading
-								else if el.type == 'field' && !el.field.nofilter && !el.field.hidden
-									li: a(href=js, data-path=el.field.path).add-list-filter
-										span(class='fieldicon fieldicon-' + el.field.type)
-										span= el.field.label
+							.dropdown.list-filter-dropdown(style='display:inline-block')
+								a(href=js, data-toggle='dropdown').btn.btn-default.dropdown-toggle
+									| Add Filter 
+									b.caret
+								ul.dropdown-menu: each el in list.uiElements
+									if el.type == 'heading'
+										li.dropdown-header= el.heading
+									else if el.type == 'field' && !el.field.nofilter && !el.field.hidden
+										li: a(href=js, data-path=el.field.path).add-list-filter
+											span(class='fieldicon fieldicon-' + el.field.type)
+											span= el.field.label
 					
 					//- lg screens only
 					//- columns and download aren't relevant when using a mobile device
-					.col-sm-4.hidden-xs: .pull-right
+					.pull-right.hidden-xs
 						.pull-right
 							a(href=download_link).btn.btn-default Download
 						div(style='margin-right: 10px;').dropdown.list-columns-dropdown.pull-right
@@ -177,12 +187,12 @@ block content
 										li.dropdown-header= el.heading
 									else if el.type == 'field' && !el.field.nocol && !el.field.hidden
 										li: a(href=js, data-col=el.field.path).btn-toggle-column
-											span(class=_.contains(colPaths, el.field.path) ? 'glyphicon glyphicon-ok-circle' : '').icon
+											span(class=_.contains(colPaths, el.field.path) ? 'ion-checkmark' : '').icon
 											span= el.field.label
 								if query.cols
 									li.divider
 									li: a(href=link_to({ cols: undefined }))
-										span.glyphicon.glyphicon-remove-circle.icon
+										span.ion-close.icon
 										span Reset to default
 			
 			
@@ -213,7 +223,7 @@ block content
 								
 								//- Numeric Fields
 								if field.type == 'number' || field.type == 'money'
-									.btn-group.btn-group-xs(data-toggle='buttons')
+									.btn-group.btn-group-operator.btn-group-xs(data-toggle='buttons')
 										button(type='button', class=!ops.operator ? 'active' : '').btn.btn-default
 											input(type='radio', name='options')
 											| exactly
@@ -223,11 +233,22 @@ block content
 										button(type='button', class=ops.operator == 'lt' ? 'active' : '', data-opt='operator', data-value='lt').btn.btn-default
 											input(type='radio', name='options')
 											| less than
-									.filter-input.filter-input-md: input(type='number', name='value', value=ops.value).form-control.input-xs
+										button(type='button', class=ops.operator == 'bt' ? 'active' : '', data-opt='operator', data-value='bt').btn.btn-default
+											input(type='radio', name='options')
+											| between
 								
+									.filter-input
+										.filter-input-range.form-inline.text-sm(style='display:none')
+											input(type='number', value=(ops.operator === 'bt' && ops.value[0])).form-control.input-xs.field-inline--xs.filter-input-range1
+											span.mh-1 and
+											input(type='number', value=(ops.operator === 'bt' && ops.value[1])).form-control.input-xs.field-inline--xs.filter-input-range2
+											span.mh-1 (inclusive)
+										.filter-input-standard(style='display:none')
+											input(type='number', name='value', value=(ops.operator !== 'bt' && ops.value)).form-control.input-xs
+							
 								//- Date
 								if field.type == 'date' || field.type == 'datetime'
-									.btn-group.btn-group-xs(data-toggle='buttons')
+									.btn-group.btn-group-operator.btn-group-xs(data-toggle='buttons')
 										button(type='button', class=(!ops.operator) ? 'active' : '').btn.btn-default
 											input(type='radio', name='options')
 											| on
@@ -237,15 +258,27 @@ block content
 										button(type='button', class=ops.operator == 'lt' ? 'active' : '', data-opt='operator', data-value='lt').btn.btn-default
 											input(type='radio', name='options')
 											| before
-									.filter-input.filter-input-md: input(type='text', name='value', value=ops.value).form-control.input-xs.ui-datepicker
+										button(type='button', class=ops.operator == 'bt' ? 'active' : '', data-opt='operator', data-value='bt').btn.btn-default
+											input(type='radio', name='options')
+											| between
+								
+									.filter-input
+										.filter-input-range.form-inline.text-sm(style='display:none')
+											input(type='text', value=(ops.operator === 'bt' && ops.value[0])).form-control.input-xs.field-inline--sm.ui-datepicker.filter-input-range1
+											span.mh-1 and
+											input(type='text', value=(ops.operator === 'bt' && ops.value[1])).form-control.input-xs.field-inline--sm.ui-datepicker.filter-input-range2
+											span.mh-1 (inclusive)
+										.filter-input-standard(style='display:none')
+											input(type='text', name='value', value=(ops.operator !== 'bt' && ops.value)).form-control.input-xs.ui-datepicker
 								
 								//- Location
 								if field.type == 'location'
-									.filter-input.filter-input-md: input(type='text', name='address', value=ops.address, placeholder='Address').form-control.input-xs
-									.filter-input.filter-input-sm: input(type='text', name='suburb', value=ops.suburb, placeholder='Suburb').form-control.input-xs
-									.filter-input.filter-input-sm: input(type='text', name='state', value=ops.state, placeholder='State').form-control.input-xs
-									.filter-input.filter-input-sm: input(type='text', name='postcode', value=ops.postcode, placeholder='Postcode').form-control.input-xs
-									.filter-input.filter-input-sm: input(type='text', name='country', value=ops.country, placeholder='Country').form-control.input-xs
+									- ops.value = ops.value || []
+									.filter-input.filter-input-md: input(type='text', name='address', value=ops.value[0], placeholder='Address').form-control.input-xs
+									.filter-input.filter-input-sm: input(type='text', name='suburb', value=ops.value[1], placeholder='Suburb').form-control.input-xs
+									.filter-input.filter-input-sm: input(type='text', name='state', value=ops.value[2], placeholder='State').form-control.input-xs
+									.filter-input.filter-input-sm: input(type='text', name='postcode', value=ops.value[3], placeholder='Postcode').form-control.input-xs
+									.filter-input.filter-input-sm: input(type='text', name='country', value=ops.value[4], placeholder='Country').form-control.input-xs
 								
 								//- Select
 								if field.type == 'select'
@@ -256,7 +289,7 @@ block content
 										button(type='button', class=ops.inv ? 'active' : '', data-opt='inv', data-value='true').btn.btn-default
 											input(type='radio', name='options')
 											| is not
-									.filter-input.filter-input-md: select()
+									.filter-input.filter-input-md: select(name='value')
 										option(value='')
 										each op in field.ops
 											option(value=op.value, selected=ops.value == op.value)= op.label
@@ -339,7 +372,7 @@ block content
 		
 		- var sortable = list.get('sortable') && !list.get('sortContext') && sort.by == 'sortOrder'
 		- var firstColspan = 1;
-		table(cellpadding=0, cellspacing=0, class=sortable ? 'sortable' : false, data-list-path=list.path).table.table-striped.items-list
+		.items-list-wrapper: table(cellpadding=0, cellspacing=0, class=sortable ? 'sortable' : false, data-list-path=list.path).table.items-list
 			if !list.get('nodelete')
 				- firstColspan++;
 				col(width=26)
@@ -354,15 +387,16 @@ block content
 						th(colspan=i == 0 && firstColspan > 1 ? firstColspan : false)
 							if col.field && sort.field && sort.field.path == col.field.path
 								if sort.inv
-									a(href=link_to({ sort: col.field.path }), title='sort by ' + col.label, data-toggle='tooltip', data-placement='top')
+									a(href=link_to({ sort: col.field.path }), title='Sort by ' + col.label + ' (asc)', class='th-sort--desc').th-sort
 										= col.label
-									.glyphicon.glyphicon-chevron-up
+										span.th-sort__icon
 								else
-									a(href=link_to({ sort: '-' + col.field.path }), title='sort by ' + col.label + ' (descending)', data-toggle='tooltip', data-placement='top')
+									a(href=link_to({ sort: '-' + col.field.path }), title='Sort by ' + col.label + ' (desc)', class='th-sort--asc').th-sort
 										= col.label
-									.glyphicon.glyphicon-chevron-down
+										span.th-sort__icon
 							else if col.field
-								a(href=link_to({ sort: col.field.path }), title='sort by ' + col.label, data-toggle='tooltip', data-placement='top')= col.label
+								a(href=link_to({ sort: col.field.path }), title='Sort by ' + col.label).th-sort= col.label
+									span.th-sort__icon
 							else
 								= col.label
 			tbody

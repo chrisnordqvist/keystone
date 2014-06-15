@@ -1,5 +1,81 @@
 # Keystone
 
+## v0.2.20 / 2014-06-06
+
+* added; recent searches UI and functionality in the Admin UI, thanks [Benjamin Lupton](https://github.com/balupton)
+* fixed; strict type checking for field.options.required, see #393
+* added; `CloudinaryImage.updateItem()`` allows updates from data, thanks [webteckie](https://github.com/webteckie)
+* added; native support for node-sass via the `sass` option, make sure you include `node-sass` in your project dependencies to use it. thanks [Fabrizio Fortunato](https://github.com/izifortune)
+* fixed; field validation methods for location & password fields
+* fixed; `keystone.createItems()` now creates items in series, not parallel
+* added; support for dynamic queries for relationship values in `keystone.createItems()`
+* added; verbose logging and strict ref checking options for `keystone.createItems()`
+* improved; performance when using the `id` property as part of a field's autokey
+
+## v0.2.19 / 2014-05-28
+
+* added; ability to change the filename in Types.LocalFile by specifying the `filename: function() {}` option, thanks [Stefan Aebischer](https://github.com/pAlpha627)
+* improved; read-only tinyMCE editor is used for htmlFields when noedit is true, thanks [Frederic Beaudet](https://github.com/fbeaudet)
+* fixed; Extracting and scoping `keystone.initAPI` to work correctly when used directly as middleware
+* improved; Added better MongoDB indexes for schemaPlugins
+* improved; invalid config handling for fields
+* fixed; relationship filters now work correctly
+* added; ability to prefix all MongoDB Collection names, thanks [David Björklund](https://github.com/kesla)
+* improved; output stack traces with error logs, thanks [Benjamin Lupton](https://github.com/balupton)
+* fixed; issues signing in users by UserID directly (introduced in 0.2.18)
+* fixed; users without passwords (auth via facebook / github / etc) will not have their sessions persisted outside of the memory store.
+* added; support for using MongoDB as the session store. set `'session store': 'mongo'` to enable this feature.
+* deprecated; support for providing the `mongo` option as an array. Use a MongoDB connection string instead, e.g. `'mongodb://localhost/db_name`
+
+## v0.2.18 / 2014-05-22
+
+* added; callbacks passed to `View.render()` are now passed `err, req, res`
+* fixed; console logging is suppressed when the option `logger` is `false`
+* fixed; issues relating to session cookies
+* fixed; a lot of minor code issues and cleanup
+* improved; test coverage
+
+## v0.2.17 / 2014-05-19
+
+* added; between filtering to date, datetime, money, and number field
+types, thanks [Benjamin Lupton](https://github.com/balupton)
+* added; new color field, thanks [Frederic Beaudet](https://github.com/fbeaudet)
+* added; automated unit tests with TravisCI, thanks [James Allen](https://github.com/jamlen) and [Andri Möll](https://github.com/moll)
+* added; .jshintrc config and better settings for .editorconfig, thanks [James Allen](https://github.com/jamlen) and [Benjamin Lupton](https://github.com/balupton)
+* added; code documentation for `/lib/view.js` class, thanks [Talon](https://github.com/LegitTalon)
+* added; coverage report and default gulp task, thanks [James Allen](https://github.com/jamlen)
+
+## v0.2.16 / 2014-05-14
+
+* fixed; issues with Keystone.prototype.import, see [#348](https://github.com/JedWatson/keystone/issues/348), thanks [ashleycorker](https://github.com/ashleycoker)
+* fixed; issues with geo handling in Location fields, see [#344](https://github.com/JedWatson/keystone/issues/344), thanks [mandb](https://github.com/mandb)
+
+## v0.2.15 / 2014-05-13
+
+* fixed; Added note to fields that didnt have one, thanks [Ötvös Richárd](https://github.com/RichardOtvos)
+* fixed; Only show "Open Keystone" link to admins, thanks [John Beppu](https://github.com/beppu)
+* fixed; Password fields are formatted correctly on the list screen of the Admin UI
+* added; Support for custom MongoDB collection names (and other Schema options, see [#292](https://github.com/JedWatson/keystone/issues/292))
+* added; Support for clearing password fields (if not required)
+* added; Password.compare is now available on the Field object
+* added; Support for loading fixture data with `keystone.createItems()` and in update scripts, see [this gist](https://gist.github.com/JedWatson/10739959) for an example
+* added; Basic support for redirects, see [#303](https://github.com/JedWatson/keystone/issues/303) for details
+* added; Support for excluding the blank option in Select fields with the `emptyOption` option
+* improved; Nicer exception on EADDRINUSE error
+* added; Warning when required fields aren't initial, see [#300](https://github.com/JedWatson/keystone/issues/300)
+* fixed; Truthy check for port breaks listening on any open port
+* fixed; Changed how updates are discovered and included, fixes previous issues with .DS_Store files
+* added; test script to package.json, spec reporter for Mocha tests and other test improvements, thanks [David Banham](https://github.com/davidbanham)
+* added; cookie secret to environment defaults init, thanks [Tom Walker](https://github.com/bladey)
+* added; separated Express setup from http server setup to enable easier Express sub-app mounting, thanks [ryedin](https://github.com/ryedin)
+* fixed; Errors are caught on item deletion, thanks [fbeaudet](https://github.com/fbeaudet)
+* fixed; Issues where `Email.send()` wasn't consistently async
+* added; Support for the argument `row` in custom `List.schema.methods.toCSV` implementations, provides the original `toCSV` data for simpler customisation
+
+...as well as several other miscellaneous fixes and improvements, thanks to all our contributors who keep making Keystone better!
+
+Also; all dependencies are up to date with their latest published versions, except for `express` and `less-middleware` which require further testing to ensure compatibility.
+
 ## v0.2.14 / 2014/04-16
 
 * added; new `createItems()` method to quickly populate data, see [this gist](https://gist.github.com/JedWatson/10739959) for usage instructions and examples
